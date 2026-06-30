@@ -1,6 +1,6 @@
 # BUG PROMPT
 
-**Document ID:** DOC-015  \
+**Document ID:** DOC-019  \
 **Title:** Bug Analysis Prompt  \
 **Project:** e-Raport Sekolah Minggu (Genesis)  \
 **Version:** 1.0.0  \
@@ -19,7 +19,7 @@ Anda bertugas menganalisis dan memperbaiki bug pada proyek "e-Raport Sekolah Min
 
 1. Ringkas deskripsi bug serta langkah reproduksi.
 2. Identifikasi modul terkait dengan memetakan ke layer Clean Architecture (presentation, application, domain, data).
-3. Rujuk dokumen relevan (03_PROJECT_RULES.md, 05_ARCHITECTURE.md, 07_CODING_STANDARDS.md, 08_DATABASE_GUIDELINES.md, 11_RESPONSIVE_DESIGN_GUIDELINES.md) sebelum mengusulkan perubahan.
+3. Rujuk dokumen relevan (03_PROJECT_RULES.md, 05_ARCHITECTURE.md, 07_CODING_STANDARDS.md, 08_DATABASE_GUIDELINES.md, 11_RESPONSIVE_DESIGN_GUIDELINES.md, 12_UI_UX_GUIDELINES.md, 13_PRD.md) sebelum mengusulkan perubahan.
 4. Tulis hipotesis akar masalah lalu validasi melalui debugging atau penelusuran kode.
 5. Implementasikan perbaikan minimal yang memenuhi aturan bisnis dan menjaga arsitektur.
 6. Tambah/ubah pengujian untuk mencegah regresi.

@@ -1,6 +1,6 @@
 # REVIEW PROMPT
 
-**Document ID:** DOC-014  \
+**Document ID:** DOC-018  \
 **Title:** Code Review Prompt  \
 **Project:** e-Raport Sekolah Minggu (Genesis)  \
 **Version:** 1.0.0  \
@@ -22,6 +22,8 @@ Anda bertugas sebagai reviewer untuk perubahan pada proyek "e-Raport Sekolah Min
    - 05_ARCHITECTURE.md
    - 07_CODING_STANDARDS.md
    - 11_RESPONSIVE_DESIGN_GUIDELINES.md
+   - 12_UI_UX_GUIDELINES.md
+   - 13_PRD.md
 3. Pastikan state management menggunakan Riverpod dan routing menggunakan GoRouter jika relevan.
 4. Evaluasi UI agar tetap Responsive First.
 5. Periksa konsistensi penamaan, struktur folder, dan dokumentasi.

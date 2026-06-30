@@ -1,6 +1,6 @@
 # AI CONTEXT
 
-**Document ID:** DOC-012  \
+**Document ID:** DOC-016  \
 **Title:** AI Context  \
 **Project:** e-Raport Sekolah Minggu (Genesis)  \
 **Version:** 1.0.0  \
@@ -37,6 +37,8 @@ Menjadi sumber konteks utama bagi AI atau kontributor baru saat mengerjakan tuga
 - [07_CODING_STANDARDS.md](./07_CODING_STANDARDS.md)
 - [08_DATABASE_GUIDELINES.md](./08_DATABASE_GUIDELINES.md)
 - [11_RESPONSIVE_DESIGN_GUIDELINES.md](./11_RESPONSIVE_DESIGN_GUIDELINES.md)
+- [12_UI_UX_GUIDELINES.md](./12_UI_UX_GUIDELINES.md)
+- [13_PRD.md](./13_PRD.md)
 
 Seluruh keputusan baru harus konsisten dengan dokumen tersebut.
 
