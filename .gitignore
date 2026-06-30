@@ -1,0 +1,29 @@
+/.dart_tool/
+/.flutter-plugins
+/.flutter-plugins-dependencies
+/.idea/
+.packages
+.pub-cache/
+.pub/
+build/
+flutter_export_environment.sh
+.melos_tool
+.melos_tool*
+*.imb
+*.iml
+*.ipr
+*.iws
+.DS_Store
+*.log
+*.tmp
+*.swp
+android/local.properties
+# IntelliJ
+*.lock
+
+# Generated files
+coverage/
+supabase/.supabase
+.env
+.env.production
+.env.development
