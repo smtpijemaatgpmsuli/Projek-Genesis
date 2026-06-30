@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:genesis/shared/widgets/adaptive_scaffold.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../authentication/application/providers/auth_state.dart';
+import '../../../authentication/domain/value_objects/user_role.dart';
+import '../../../shared/widgets/adaptive_scaffold.dart';
+import '../../../../core/router/routes.dart';
 
 class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key});
@@ -15,12 +17,14 @@ class DashboardPage extends ConsumerWidget {
     return AdaptiveScaffold(
       mobile: _DashboardContent(
         userName: user?.displayName ?? user?.email ?? 'Pengguna',
+        role: user?.role,
       ),
       desktop: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 960),
           child: _DashboardContent(
             userName: user?.displayName ?? user?.email ?? 'Pengguna',
+            role: user?.role,
           ),
         ),
       ),
@@ -29,15 +33,27 @@ class DashboardPage extends ConsumerWidget {
 }
 
 class _DashboardContent extends StatelessWidget {
-  const _DashboardContent({required this.userName});
+  const _DashboardContent({required this.userName, this.role});
 
   final String userName;
+  final UserRole? role;
+
+  bool get _canManageUsers =>
+      role == UserRole.superAdmin || role == UserRole.admin;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dashboard'),
+        actions: [
+          if (_canManageUsers)
+            IconButton(
+              tooltip: 'Kelola Pengguna',
+              onPressed: () => context.go(Routes.userManagement),
+              icon: const Icon(Icons.manage_accounts),
+            ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(24),
