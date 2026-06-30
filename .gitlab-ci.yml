@@ -1,0 +1,25 @@
+stages:
+  - analyze
+  - test
+
+image: "cirrusci/flutter:stable"
+
+cache:
+  key: "flutter-deps"
+  paths:
+    - .pub-cache/
+    - build/
+
+before_script:
+  - flutter --version
+  - flutter pub get
+
+analyze:
+  stage: analyze
+  script:
+    - flutter analyze
+
+unit_test:
+  stage: test
+  script:
+    - flutter test
