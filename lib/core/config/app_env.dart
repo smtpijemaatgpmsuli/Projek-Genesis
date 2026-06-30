@@ -1,5 +1,4 @@
-import 'dart:convert';
-import 'dart:io';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AppEnv {
   AppEnv({required this.supabaseUrl, required this.supabaseAnonKey});
@@ -7,17 +6,17 @@ class AppEnv {
   final String supabaseUrl;
   final String supabaseAnonKey;
 
-  static Future<AppEnv> load() async {
-    final file = File('.env');
-    if (!await file.exists()) {
-      throw Exception('Missing .env file with Supabase configuration');
+  factory AppEnv.load() {
+    final supabaseUrl = dotenv.env['SUPABASE_URL'];
+    final supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'];
+
+    if (supabaseUrl == null || supabaseAnonKey == null) {
+      throw Exception('Missing Supabase environment variables. Create .env based on .env.example');
     }
 
-    final json = jsonDecode(await file.readAsString()) as Map<String, dynamic>;
-
     return AppEnv(
-      supabaseUrl: json['SUPABASE_URL'] as String,
-      supabaseAnonKey: json['SUPABASE_ANON_KEY'] as String,
+      supabaseUrl: supabaseUrl,
+      supabaseAnonKey: supabaseAnonKey,
     );
   }
 }

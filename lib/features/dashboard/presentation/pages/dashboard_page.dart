@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:genesis/shared/widgets/adaptive_scaffold.dart';
+
 import '../../../authentication/application/providers/auth_state.dart';
-import '../../../shared/widgets/adaptive_scaffold.dart';
 
 class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key});
@@ -12,7 +13,9 @@ class DashboardPage extends ConsumerWidget {
     final user = ref.watch(authStateProvider);
 
     return AdaptiveScaffold(
-      mobile: _DashboardContent(userName: user?.displayName ?? user?.email ?? 'Pengguna'),
+      mobile: _DashboardContent(
+        userName: user?.displayName ?? user?.email ?? 'Pengguna',
+      ),
       desktop: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 960),

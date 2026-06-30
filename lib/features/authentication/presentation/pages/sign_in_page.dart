@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../shared/widgets/adaptive_scaffold.dart';
+import 'package:genesis/shared/widgets/adaptive_scaffold.dart';
+
 import '../../application/providers/auth_state.dart';
 
 class SignInPage extends ConsumerStatefulWidget {
@@ -38,7 +39,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
             email: _emailController.text.trim(),
             password: _passwordController.text,
           );
-    } catch (error) {
+    } catch (_) {
       setState(() => _error = 'Gagal masuk. Periksa kredensial.');
     } finally {
       if (mounted) {
@@ -146,7 +147,11 @@ class _SignInForm extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: loading ? null : onSubmit,
                     child: loading
-                        ? const CircularProgressIndicator()
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
                         : const Text('Masuk'),
                   ),
                 ),
