@@ -1,6 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../domain/entities/app_user.dart';
+import '../../domain/value_objects/user_role.dart';
 
 abstract class AuthRepository {
   Future<AppUser?> getCurrentUser();
@@ -29,7 +30,7 @@ class SupabaseAuthRepository implements AuthRepository {
       id: user.id,
       email: user.email ?? '',
       displayName: profile?['full_name'] as String?,
-      role: profile?['role'] as String? ?? 'pengasuh',
+      role: _mapRole(profile?['role'] as String?),
     );
   }
 
@@ -58,7 +59,7 @@ class SupabaseAuthRepository implements AuthRepository {
       id: user.id,
       email: user.email ?? '',
       displayName: profile?['full_name'] as String?,
-      role: profile?['role'] as String? ?? 'pengasuh',
+      role: _mapRole(profile?['role'] as String?),
     );
   }
 
@@ -74,5 +75,14 @@ class SupabaseAuthRepository implements AuthRepository {
         callback(await getCurrentUser());
       }
     });
+  }
+
+  UserRole _mapRole(String? value) {
+    return switch (value) {
+      'super_admin' => UserRole.superAdmin,
+      'admin' => UserRole.admin,
+      'orang_tua' => UserRole.orangTua,
+      _ => UserRole.pengasuh,
+    };
   }
 }

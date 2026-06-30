@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../value_objects/user_role.dart';
+
 part 'app_user.freezed.dart';
 part 'app_user.g.dart';
 
@@ -8,7 +10,7 @@ class AppUser with _$AppUser {
   const factory AppUser({
     required String id,
     required String email,
-    required String role,
+    @UserRoleConverter() required UserRole role,
     String? displayName,
   }) = _AppUser;
 
