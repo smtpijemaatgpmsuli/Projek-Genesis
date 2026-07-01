@@ -84,3 +84,58 @@ main -> develop -> feature/* -> review -> merge
 - style:
 - test:
 - chore:
+
+## Getting Started
+
+### Prasyarat
+
+- Flutter (versi stable)
+- Dart SDK
+- Supabase project (URL & anon key)
+- Git
+
+### Konfigurasi Lingkungan
+
+1. Salin file `.env.example` menjadi `.env`.
+2. Isi variabel berikut berdasarkan project Supabase kamu:
+   ```env
+   SUPABASE_URL=https://your-project.supabase.co
+   SUPABASE_ANON_KEY=your-anon-key
+   ```
+3. Pastikan fungsi Supabase berikut tersedia:
+   - `dashboard_summary`
+   - `generate_report_card`
+   - `sign_report_card`
+   - `class_with_schedule_assignments`
+   - `update_class_schedule`
+   - `update_class_assignments`
+   - `upsert_attendance_records`
+   - `upsert_assessments`
+
+### Menjalankan Aplikasi
+
+```bash
+flutter pub get
+flutter run
+```
+
+### Pipeline CI
+
+Proyek menggunakan GitLab CI dengan tahap `flutter analyze` dan `flutter test`. File konfigurasinya berada di `.gitlab-ci.yml`.
+
+## Modul Utama
+
+1. **Manajemen Kelas** – Tambah/edit kelas, jadwal, dan penugasan pengasuh.
+2. **Kehadiran** – Catat kehadiran per sesi, pengingat absensi.
+3. **Penilaian** – Input nilai spiritual, perilaku, aktivitas.
+4. **Rapor Digital** – Ringkasan penilaian & kehadiran, tanda tangan admin/pengasuh.
+5. **Notifikasi** – Pengingat dan pemberitahuan rapor siap diakses.
+
+## Pengujian
+
+- `flutter analyze`
+- `flutter test`
+
+## Kontribusi
+
+Lihat [CONTRIBUTING.md](./CONTRIBUTING.md) untuk panduan lengkap.
