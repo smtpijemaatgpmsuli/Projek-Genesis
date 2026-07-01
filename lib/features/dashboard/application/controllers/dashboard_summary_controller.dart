@@ -1,7 +1,8 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+﻿import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../authentication/application/providers/auth_state.dart';
+import '../../../authentication/domain/value_objects/user_role.dart';
 import '../../data/repositories/dashboard_repository.dart';
 import '../../domain/entities/dashboard_summary.dart';
 
@@ -12,9 +13,12 @@ final dashboardRepositoryProvider = Provider<DashboardRepository>((ref) {
 final dashboardSummaryProvider = StateNotifierProvider.autoDispose<
     DashboardSummaryController, AsyncValue<DashboardSummary>>((ref) {
   final repository = ref.watch(dashboardRepositoryProvider);
-  final auth = ref.watch(authStateProvider);
-  final role = auth?.role;
-  return DashboardSummaryController(repository, role?.value ?? 'pengasuh')
+  final authState = ref.watch(authStateProvider);
+  final role = switch (authState) {
+    AuthAuthenticated(:final user) => user.role.value,
+    _ => 'pengasuh',
+  };
+  return DashboardSummaryController(repository, role)
     ..load();
 });
 

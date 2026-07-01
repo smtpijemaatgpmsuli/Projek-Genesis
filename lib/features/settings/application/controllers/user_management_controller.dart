@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+﻿import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../data/repositories/user_management_repository.dart';
@@ -51,8 +51,8 @@ class UserManagementController
     ]);
     try {
       await _repository.updateUserRole(userId: userId, role: role);
-    } catch (error, stack) {
-      state = previous ?? AsyncValue.error(error, stack);
+    } catch (error, _) {
+      state = previous;
       rethrow;
     }
   }
@@ -70,8 +70,8 @@ class UserManagementController
     ]);
     try {
       await _repository.toggleUserActive(userId: userId, isActive: isActive);
-    } catch (error, stack) {
-      state = previous ?? AsyncValue.error(error, stack);
+    } catch (error, _) {
+      state = previous;
       rethrow;
     }
   }
@@ -92,3 +92,6 @@ class InviteUserController extends StateNotifier<AsyncValue<void>> {
     );
   }
 }
+
+
+

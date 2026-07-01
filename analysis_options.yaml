@@ -1,11 +1,10 @@
-include: package:flutter_lints/flutter.yaml
+﻿include: package:flutter_lints/flutter.yaml
 
 linter:
   rules:
     avoid_print: true
     prefer_const_constructors: true
     prefer_const_literals_to_create_immutables: true
-    always_require_non_null_named_parameters: true
     sort_child_properties_last: true
 
 analyzer:

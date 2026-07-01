@@ -1,14 +1,13 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../authentication/application/providers/auth_state.dart';
-import '../../../authentication/domain/value_objects/user_role.dart';
-import '../../../dashboard/presentation/pages/dashboard_page.dart';
-import '../../../shared/widgets/adaptive_scaffold.dart';
+import 'package:genesis/features/authentication/application/providers/auth_state.dart';
+import 'package:genesis/features/authentication/domain/value_objects/user_role.dart';
+import 'package:genesis/shared/widgets/adaptive_scaffold.dart';
 import '../../application/controllers/user_management_controller.dart';
 import '../../domain/entities/managed_user.dart';
-import '../../../../core/router/routes.dart';
+import 'package:genesis/core/router/routes.dart';
 
 class UserManagementPage extends ConsumerWidget {
   const UserManagementPage({super.key});
@@ -53,7 +52,11 @@ class _UserManagementScaffold extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentUser = ref.watch(authStateProvider);
+    final authState = ref.watch(authStateProvider);
+  final currentUserId = switch (authState) {
+    AuthAuthenticated(:final user) => user.id,
+    _ => null,
+  };
 
     return Scaffold(
       appBar: AppBar(
@@ -78,7 +81,7 @@ class _UserManagementScaffold extends ConsumerWidget {
         child: usersState.when(
           data: (users) => _UsersTable(
             users: users,
-            currentUserId: currentUser?.id,
+            currentUserId: currentUserId,
           ),
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (error, _) => Center(
@@ -405,3 +408,6 @@ class _InviteUserDialogState extends ConsumerState<_InviteUserDialog> {
     );
   }
 }
+
+
+
