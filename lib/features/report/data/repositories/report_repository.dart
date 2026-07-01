@@ -2,7 +2,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../assessment/domain/entities/assessment_entry.dart';
 import '../../../attendance/domain/entities/attendance_record.dart';
-import '../../../attendance/domain/entities/attendance_session.dart';
 import '../../../attendance/domain/entities/student_brief.dart';
 import '../../domain/entities/report_card.dart';
 

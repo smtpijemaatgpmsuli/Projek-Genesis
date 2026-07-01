@@ -3,6 +3,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../domain/entities/app_user.dart';
 import '../../domain/value_objects/user_role.dart';
 
+/// Converter instance — single source of truth untuk mapping role string -> enum.
+const _roleConverter = UserRoleConverter();
+
 abstract class AuthRepository {
   Future<AppUser?> getCurrentUser();
   Future<AppUser> signIn({required String email, required String password});
@@ -30,7 +33,7 @@ class SupabaseAuthRepository implements AuthRepository {
       id: user.id,
       email: user.email ?? '',
       displayName: profile?['full_name'] as String?,
-      role: _mapRole(profile?['role'] as String?),
+      role: _roleConverter.fromJson(profile?['role'] as String? ?? 'pengasuh'),
     );
   }
 
@@ -46,7 +49,7 @@ class SupabaseAuthRepository implements AuthRepository {
 
     final user = response.user;
     if (user == null) {
-      throw AuthException('Invalid credentials');
+      throw const AuthException('Invalid credentials');
     }
 
     final profile = await _client
@@ -59,7 +62,7 @@ class SupabaseAuthRepository implements AuthRepository {
       id: user.id,
       email: user.email ?? '',
       displayName: profile?['full_name'] as String?,
-      role: _mapRole(profile?['role'] as String?),
+      role: _roleConverter.fromJson(profile?['role'] as String? ?? 'pengasuh'),
     );
   }
 
@@ -75,14 +78,5 @@ class SupabaseAuthRepository implements AuthRepository {
         callback(await getCurrentUser());
       }
     });
-  }
-
-  UserRole _mapRole(String? value) {
-    return switch (value) {
-      'super_admin' => UserRole.superAdmin,
-      'admin' => UserRole.admin,
-      'orang_tua' => UserRole.orangTua,
-      _ => UserRole.pengasuh,
-    };
   }
 }

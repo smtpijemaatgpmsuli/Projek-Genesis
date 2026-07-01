@@ -4,18 +4,37 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../data/repositories/report_repository.dart';
 import '../../domain/entities/report_card.dart';
 import '../../../attendance/domain/entities/student_brief.dart';
-import '../../../attendance/application/controllers/attendance_controller.dart';
 
 final reportRepositoryProvider = Provider<ReportRepository>((ref) {
   return SupabaseReportRepository(Supabase.instance.client);
 });
 
-final reportStateProvider = StateNotifierProvider.autoDispose<
-    ReportController, ReportState>((ref) {
-  final repository = ref.watch(reportRepositoryProvider);
-  final attendanceState = ref.watch(attendanceStateProvider);
-  final students = attendanceState.students.value ?? [];
-  return ReportController(repository, students);
+/// Provider to load students for the currently signed-in caregiver.
+final reportStudentListProvider = FutureProvider<List<StudentBrief>>((ref) async {
+  final client = Supabase.instance.client;
+  // Get the user's assigned classes
+  final userId = client.auth.currentUser?.id;
+  if (userId == null) return [];
+
+  final classIds = await client
+      .from('class_assignments')
+      .select('class_id')
+      .eq('profile_id', userId);
+
+  if (classIds.isEmpty) return [];
+
+  final ids = (classIds as List).map((e) => e['class_id'] as String).toList();
+
+  final students = await client
+      .from('students')
+      .select('id, full_name')
+      .inFilter('class_id', ids)
+      .eq('is_active', true)
+      .order('full_name');
+
+  return (students as List)
+      .map((e) => StudentBrief.fromMap(e as Map<String, dynamic>))
+      .toList(growable: false);
 });
 
 class ReportState {
@@ -97,3 +116,10 @@ class ReportController extends StateNotifier<ReportState> {
     }
   }
 }
+
+final reportStateProvider = StateNotifierProvider.autoDispose<
+    ReportController, ReportState>((ref) {
+  final repository = ref.watch(reportRepositoryProvider);
+  // Initial empty — students will be loaded async by reportStudentListProvider
+  return ReportController(repository, []);
+});

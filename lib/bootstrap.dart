@@ -8,6 +8,6 @@ Future<void> bootstrap() async {
   final env = AppEnv.load();
   await Supabase.initialize(
     url: env.supabaseUrl,
-    anonKey: env.supabaseAnonKey,
+    publishableKey: env.supabaseAnonKey,
   );
 }

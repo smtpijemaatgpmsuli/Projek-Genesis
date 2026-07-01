@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 
 import '../../../authentication/application/providers/auth_state.dart';
 import '../../../authentication/domain/value_objects/user_role.dart';
-import '../../../attendance/application/controllers/attendance_controller.dart';
 import '../../../attendance/domain/entities/student_brief.dart';
 import '../../application/controllers/report_controller.dart';
 import '../../domain/entities/report_card.dart';
@@ -14,12 +13,18 @@ class ReportPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final auth = ref.watch(authStateProvider);
-    final attendanceState = ref.watch(attendanceStateProvider);
+    final authState = ref.watch(authStateProvider);
+    final studentsAsync = ref.watch(reportStudentListProvider);
 
-    final isPengasuh = auth?.role == UserRole.pengasuh;
-    final isAdmin = auth?.role == UserRole.admin || auth?.role == UserRole.superAdmin;
-    final isParent = auth?.role == UserRole.orangTua;
+    final (isPengasuh, isAdmin, isParent, role) = switch (authState) {
+      AuthAuthenticated(:final user) => (
+          user.role == UserRole.pengasuh,
+          user.role == UserRole.admin || user.role == UserRole.superAdmin,
+          user.role == UserRole.orangTua,
+          user.role,
+        ),
+      _ => (false, false, false, UserRole.pengasuh),
+    };
 
     if (!isPengasuh && !isAdmin && !isParent) {
       return const Scaffold(
@@ -27,18 +32,20 @@ class ReportPage extends ConsumerWidget {
       );
     }
 
-    final students = attendanceState.students.value ?? [];
-    if (students.isEmpty && !isParent) {
-      return const Scaffold(
-        body: Center(child: Text('Belum ada data siswa tersedia.')),
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Rapor Digital'),
       ),
-      body: _ReportBody(students: students, role: auth?.role ?? UserRole.pengasuh),
+      body: studentsAsync.when(
+        data: (students) {
+          if (students.isEmpty && !isParent) {
+            return const Center(child: Text('Belum ada data siswa tersedia.'));
+          }
+          return _ReportBody(students: students, role: role);
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, _) => Center(child: Text('Gagal memuat siswa: $e')),
+      ),
     );
   }
 }
@@ -84,7 +91,7 @@ class _ReportBodyState extends ConsumerState<_ReportBody> {
               Expanded(
                 child: DropdownButtonFormField<String>(
                   decoration: const InputDecoration(labelText: 'Periode Rapor'),
-                  value: state.currentTerm,
+                  initialValue: state.currentTerm,
                   items: _terms
                       .map(
                         (term) => DropdownMenuItem(
@@ -105,7 +112,7 @@ class _ReportBodyState extends ConsumerState<_ReportBody> {
                 Expanded(
                   child: DropdownButtonFormField<StudentBrief>(
                     decoration: const InputDecoration(labelText: 'Pilih Siswa'),
-                    value: _selectedStudent,
+                    initialValue: _selectedStudent,
                     items: widget.students
                         .map(
                           (student) => DropdownMenuItem(
@@ -270,13 +277,12 @@ class _ReportCardView extends ConsumerWidget {
                 Text('Kelas: ${report.className}'),
                 Text('Periode: ${report.term}'),
                 const Divider(height: 32),
-                Text('Penilaian'),
+                const Text('Penilaian'),
                 Text('- Spiritual: ${report.assessment.spiritual}'),
                 Text('- Perilaku: ${report.assessment.behavior}'),
                 Text('- Aktivitas: ${report.assessment.activity}'),
                 const Divider(height: 32),
-                Text('Catatan:
-${report.assessment.notes}'),
+                Text('Catatan: ${report.assessment.notes}'),
                 const Divider(height: 32),
                 Text('Kehadiran: Hadir ${report.attendanceSummary.present}, Tidak Hadir ${report.attendanceSummary.absent}, Izin ${report.attendanceSummary.excused}'),
                 const SizedBox(height: 24),
@@ -335,7 +341,7 @@ class _AttendanceBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return Chip(
       label: Text('$label: $value'),
-      backgroundColor: color.withOpacity(0.15),
+      backgroundColor: color.withValues(alpha: 0.15),
       shape: StadiumBorder(side: BorderSide(color: color)),
     );
   }
